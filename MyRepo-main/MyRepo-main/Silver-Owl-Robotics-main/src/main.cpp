@@ -1,13 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       main.cpp                                                  */
-/*    Author:       VEX                                                       */
-/*    Created:      Thu Sep 26 2019                                           */
-/*    Description:  Competition Template                                      */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-
-//#include "STDLib.cpp"
 #include "vex.h"
 
 #include "screen_gui.hpp"
@@ -279,6 +269,7 @@ Scrapper.set(false);
  testskills();
 
 }
+
 //MoveTimePID(TestPara, -100, 0.5,0.1,-40,true);//score 2nd triball
 //(PID Parameters, motor speed -100 - 100, time for travel 0 - inf, time to accelerate to full speed, Absolute Heading, Braking?)
 
@@ -290,7 +281,7 @@ CStop();
 int RV;
 int LV;
 int DriveTask(void){
-  LF.setStopping(hold);
+      LF.setStopping(hold);
       LM.setStopping(hold);
       LB.setStopping(hold);
       RF.setStopping(hold);
@@ -300,8 +291,8 @@ int DriveTask(void){
   {
   
     EXIT=true;
-    RV=Controller1.Axis3.position(percent)-Controller1.Axis1.position(percent);
-    LV=Controller1.Axis3.position(percent)+Controller1.Axis1.position(percent);
+    RV=-0.8*(Controller1.Axis1.position(percent))+Controller1.Axis3.position(percent);
+    LV=-0.8*(Controller1.Axis1.position(percent))-Controller1.Axis3.position(percent);
     Move(LV,RV);
   }
 
@@ -310,9 +301,9 @@ return 0;
 int V;
 int ButtonPressingR,RTaskActiv;
 int ButtonPressingR2,R2TaskActiv;
+int pow2 = 100;
 int ATask(void)
 {
-  double pow;
   
   //EditcodeLater
     while(true)
@@ -321,7 +312,6 @@ int ATask(void)
     if (Controller1.ButtonR1.pressing()==1)
     {
       IntakeBoth(100);
-      
     
     }
     
@@ -332,11 +322,18 @@ int ATask(void)
     else if (Controller1.ButtonR2.pressing()==1)
     {
       RunBottom(100);
+      RunSecondStage(-30);
+
+    }
+     else if (Controller1.ButtonL2.pressing()==1)
+    {
+      RunBottom(100);
+      RunSecondStage(50);
 
     }
     else
     {
-      IntakeBoth(0);
+       IntakeBoth(0);
 
     }
 
@@ -354,6 +351,7 @@ int ButtonPressingRight,RightTaskActiv;
 
 int PTask(void)
 {
+  
     while(true)
     {
       //Toggles Tilt
@@ -390,7 +388,8 @@ int PTask(void)
       Lift.set(false);
     }
     
-      //Toggles Pusher
+      
+    //
     if(RightTaskActiv==0&&Controller1.ButtonB.pressing()&&ButtonPressingRight==0)
     {
       ButtonPressingRight=1;
